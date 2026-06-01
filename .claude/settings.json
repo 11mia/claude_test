@@ -28,6 +28,19 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit *)",
+            "shell": "powershell",
+            "command": "$r=& bash 'C:/Users/student/0611/my-app/scripts/guardrails/pre-commit-secrets-scan.sh' 2>&1;if($LASTEXITCODE -ne 0){[PSCustomObject]@{continue=$false;stopReason=('커밋 차단 — 시크릿 감지: '+($r-join ' | '))}|ConvertTo-Json -Compress}",
+            "timeout": 15,
+            "statusMessage": "[guard] 커밋 전 시크릿 스캔 중..."
+          }
+        ]
+      },
+      {
         "matcher": "Write|Edit",
         "hooks": [
           {

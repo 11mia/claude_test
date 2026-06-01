@@ -22,10 +22,12 @@ while IFS= read -r file; do
   # 스테이징된 콘텐츠를 읽는다 (워킹 카피가 아닌 index 기준)
   content=$(git show ":$file" 2>/dev/null) || continue
 
-  # Guard 1: 하드코딩된 JWT/API 키 패턴
-  if echo "$content" | grep -qE 'eyJ[A-Za-z0-9+/]{20,}|sk-ant-[A-Za-z0-9_-]{60,}|sbp_[a-zA-Z0-9]{40,}'; then
-    echo "BLOCKED [하드코딩 키]: $file"
-    BLOCKED=1
+  # Guard 1: 하드코딩된 JWT/API 키 패턴 (lockfile 제외 — 무결성 해시 false positive 방지)
+  if ! echo "$file" | grep -qE '(package-lock\.json|yarn\.lock|pnpm-lock\.yaml)$'; then
+    if echo "$content" | grep -qE 'eyJ[A-Za-z0-9+/]{20,}|sk-ant-[A-Za-z0-9_-]{60,}|sbp_[a-zA-Z0-9]{40,}'; then
+      echo "BLOCKED [하드코딩 키]: $file"
+      BLOCKED=1
+    fi
   fi
 
   # Guard 2: 서버 전용 키를 클라이언트 파일에서 참조

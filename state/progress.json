@@ -1,13 +1,28 @@
 {
   "current_sprint": "sprint-01",
-  "overall_status": "planning",
+  "overall_status": "in_progress",
   "last_updated": "2026-06-01",
   "sprints": {
     "sprint-01": {
-      "status": "not_started",
+      "status": "in_progress",
       "goal": "Supabase 기반 인증 + DB 스키마 + 공통 레이아웃 구축",
-      "completed_tasks": [],
-      "in_progress_tasks": [],
+      "completed_tasks": [
+        "DB 6개 테이블 생성 (MCP 적용)",
+        "모든 테이블 RLS 활성화 및 정책 적용",
+        "handle_new_user 트리거 생성",
+        "src/lib/supabase/client.ts 구현",
+        "src/lib/supabase/server.ts 구현",
+        "src/proxy.ts (미들웨어) 구현 - 세션 갱신 + 인증 가드",
+        "/login 페이지 구현",
+        "/signup 페이지 구현",
+        "(dashboard)/layout.tsx 인증 가드 + 네비게이션 구현",
+        "대시보드 홈(/) 구현",
+        "npm run verify 통과"
+      ],
+      "in_progress_tasks": [
+        "git 초기화 및 커밋",
+        "Vercel 배포"
+      ],
       "blocked_tasks": []
     },
     "sprint-02": {
@@ -31,7 +46,7 @@
     "sprint-03": null
   },
   "environment": {
-    "supabase_project": "미설정",
+    "supabase_project": "eecwisonxrrkavatqtci",
     "vercel_project": "미설정",
     "external_apis": {
       "polygon": "미설정",

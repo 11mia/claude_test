@@ -23,6 +23,7 @@ model: sonnet
 | `team-frontend` | Next.js 페이지·컴포넌트·Tailwind | UI 관련 작업 |
 | `team-api` | Route Handler·외부 API 연동 | API 관련 작업 |
 | `evaluator` | 품질 심사 | 팀원 작업 완료 후 반드시 호출 |
+| `security-auditor` | 보안 감사 (RLS·키 노출·가드레일) | sprint 전체 완료 직전 반드시 호출 |
 
 ---
 
@@ -82,14 +83,16 @@ END FOR
 
 아래 모두 충족 시에만 sprint를 완료로 선언한다:
 1. sprint contract의 모든 완료 기준 항목이 evaluator에게 APPROVED됨
-2. `npm run verify` 최종 통과 확인
-3. `state/progress.json` 업데이트 완료
-4. `docs/QUALITY_SCORE.md`에 해당 sprint 점수 기록
-5. `eval/final-report.md` 업데이트 (sprint-03의 경우)
+2. `security-auditor`를 호출하여 보안 감사 통과 확인 (RLS·키 노출·가드레일)
+3. `npm run verify` 최종 통과 확인
+4. `state/progress.json` 업데이트 완료
+5. `docs/QUALITY_SCORE.md`에 해당 sprint 점수 기록
+6. `eval/final-report.md` 업데이트 (sprint-03의 경우)
 
 ---
 
 ## 금지 사항
 - evaluator 호출 없이 작업을 완료 처리하지 마라.
 - evaluator의 NEEDS_REVISION을 무시하고 다음 작업으로 넘어가지 마라.
+- security-auditor 호출 없이 sprint를 완료로 선언하지 마라.
 - sprint contract 범위 밖의 작업을 팀원에게 지시하지 마라.

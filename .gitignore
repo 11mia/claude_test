@@ -42,3 +42,5 @@ next-env.d.ts
 
 # claude code (local overrides only — settings.json is committed)
 .claude/settings.local.json
+
+.vercel

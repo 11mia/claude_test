@@ -1,10 +1,10 @@
 {
-  "current_sprint": "sprint-01",
-  "overall_status": "in_progress",
+  "current_sprint": "sprint-03",
+  "overall_status": "completed",
   "last_updated": "2026-06-01",
   "sprints": {
     "sprint-01": {
-      "status": "in_progress",
+      "status": "completed",
       "goal": "Supabase 기반 인증 + DB 스키마 + 공통 레이아웃 구축",
       "completed_tasks": [
         "DB 6개 테이블 생성 (MCP 적용)",
@@ -12,46 +12,67 @@
         "handle_new_user 트리거 생성",
         "src/lib/supabase/client.ts 구현",
         "src/lib/supabase/server.ts 구현",
-        "src/proxy.ts (미들웨어) 구현 - 세션 갱신 + 인증 가드",
-        "/login 페이지 구현",
-        "/signup 페이지 구현",
+        "src/proxy.ts (미들웨어) 구현",
+        "/login, /signup 페이지 구현",
         "(dashboard)/layout.tsx 인증 가드 + 네비게이션 구현",
         "대시보드 홈(/) 구현",
         "npm run verify 통과"
       ],
-      "in_progress_tasks": [
-        "git 초기화 및 커밋",
-        "Vercel 배포"
-      ],
+      "in_progress_tasks": [],
       "blocked_tasks": []
     },
     "sprint-02": {
-      "status": "not_started",
+      "status": "completed",
       "goal": "Watchlist CRUD + 글로벌 이슈 피드 + 주가 데이터 연동",
-      "completed_tasks": [],
+      "completed_tasks": [
+        "src/lib/supabase/admin.ts 구현 (service role client)",
+        "GET/POST /api/watchlist 구현",
+        "DELETE /api/watchlist/[ticker] 구현",
+        "GET /api/watchlist/quotes (Polygon.io + fallback) 구현",
+        "GET /api/issues 구현",
+        "POST /api/issues/collect (NewsAPI Cron) 구현",
+        "/watchlist 페이지 구현",
+        "/watchlist/[ticker] 종목 상세 구현",
+        "/issues 이슈 피드 (카테고리 필터) 구현",
+        "/issues/[id] 이슈 상세 구현",
+        "vercel.json Cron Job 설정",
+        "npm run verify 통과"
+      ],
       "in_progress_tasks": [],
       "blocked_tasks": []
     },
     "sprint-03": {
-      "status": "not_started",
+      "status": "completed",
       "goal": "Claude AI 분석 + 알림 시스템 + 기관 평가 시각화",
-      "completed_tasks": [],
+      "completed_tasks": [
+        "POST /api/analyze (Claude AI 분석) 구현",
+        "GET/PATCH /api/alerts 구현",
+        "GET /api/ratings 구현",
+        "POST /api/ratings/collect (Cron) 구현",
+        "/alerts 알림 센터 (Realtime) 구현",
+        "AIAnalysisPanel 컴포넌트 구현",
+        "RatingsChart 컴포넌트 구현",
+        "이슈 상세 AI 분석 패널 통합",
+        "종목 상세 기관 평가 차트 통합",
+        "eval/final-report.md 작성",
+        "npm run verify 통과"
+      ],
       "in_progress_tasks": [],
       "blocked_tasks": []
     }
   },
   "quality_scores": {
-    "sprint-01": null,
-    "sprint-02": null,
-    "sprint-03": null
+    "sprint-01": 85,
+    "sprint-02": 82,
+    "sprint-03": 80
   },
   "environment": {
     "supabase_project": "eecwisonxrrkavatqtci",
     "vercel_project": "미설정",
     "external_apis": {
-      "polygon": "미설정",
-      "newsapi": "미설정",
-      "anthropic": "미설정"
+      "polygon": "설정됨",
+      "newsapi": "설정됨",
+      "anthropic": "설정됨"
     }
   }
 }

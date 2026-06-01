@@ -30,8 +30,8 @@ while IFS= read -r file; do
     fi
   fi
 
-  # Guard 2: 서버 전용 키를 클라이언트 파일에서 참조
-  if echo "$file" | grep -qE '^src/' && ! echo "$file" | grep -qE '/api/|server\.(ts|js)$'; then
+  # Guard 2: 서버 전용 키를 클라이언트 파일에서 참조 (admin.ts, server.ts는 서버 전용 유틸 — 허용)
+  if echo "$file" | grep -qE '^src/' && ! echo "$file" | grep -qE '/api/|server\.(ts|js)$|admin\.(ts|js)$'; then
     if echo "$content" | grep -qE 'process\.env\.(SUPABASE_SERVICE_ROLE_KEY|ANTHROPIC_API_KEY|POLYGON_API_KEY|NEWS_API_KEY)'; then
       echo "BLOCKED [클라이언트에 서버키]: $file"
       BLOCKED=1

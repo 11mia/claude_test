@@ -1,0 +1,55 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "Write-Output '{\"systemMessage\": \"[완료 체크리스트]\\n1. npm run verify (tsc + eslint + build) 실행했는가?\\n2. state/progress.json 업데이트했는가?\\n3. Supabase RLS 가정이 docs/SECURITY.md에 문서화됐는가?\\n4. 아키텍처 결정이 있었다면 docs/DECISIONS.md를 업데이트했는가?'}"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "$json = $input | ConvertFrom-Json; $f = $json.tool_input.file_path; if ($f -match '\\.(ts|tsx)$' -and $f -match 'my-app') { Set-Location 'C:\\Users\\student\\0611\\my-app'; $result = npx tsc --noEmit 2>&1; if ($LASTEXITCODE -ne 0) { $out = $result | Select-Object -Last 10 | Out-String; Write-Output \"{`\"systemMessage`\": `\"TypeScript 오류 감지:\\n$($out.Trim())`\"}\"; } } ",
+            "timeout": 40,
+            "statusMessage": "TypeScript 타입 검사 중...",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "$json = $input | ConvertFrom-Json; $f = $json.tool_input.file_path; if ($f -match '\\.env') { Write-Output '{\"continue\": false, \"stopReason\": \".env 파일 직접 수정은 차단됩니다. 환경 변수는 Vercel 대시보드 또는 로컬 .env.local에서 직접 관리하세요. SUPABASE_SERVICE_ROLE_KEY 등 서버 전용 키가 클라이언트에 노출되지 않도록 주의하세요.\"}' }",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npx tsc *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ]
+  }
+}

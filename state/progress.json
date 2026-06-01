@@ -1,5 +1,5 @@
 {
-  "current_sprint": "sprint-03",
+  "current_sprint": "e2e-vercel",
   "overall_status": "completed",
   "last_updated": "2026-06-01",
   "sprints": {
@@ -41,6 +41,22 @@
       "in_progress_tasks": [],
       "blocked_tasks": []
     },
+    "e2e-vercel": {
+      "status": "completed",
+      "goal": "Vercel e2e 테스트 10/10 통과",
+      "completed_tasks": [
+        "e2e 테스트 계정 생성 (e2e@stockradar.test)",
+        "auth.spec.ts 5개 테스트 작성",
+        "dashboard.spec.ts 5개 테스트 작성",
+        "Vercel 환경변수 BOM 오염 원인 진단 (NEXT_PUBLIC_SUPABASE_ANON_KEY)",
+        "REST API로 BOM 없이 환경변수 재설정",
+        "Vercel production 재배포",
+        "e2e 10/10 통과 확인 (claude-test-tan.vercel.app)",
+        "GitHub push 완료 (github.com/11mia/claude_test)"
+      ],
+      "in_progress_tasks": [],
+      "blocked_tasks": []
+    },
     "sprint-03": {
       "status": "completed",
       "goal": "Claude AI 분석 + 알림 시스템 + 기관 평가 시각화",
@@ -68,7 +84,9 @@
   },
   "environment": {
     "supabase_project": "eecwisonxrrkavatqtci",
-    "vercel_project": "미설정",
+    "vercel_project": "claude-test",
+    "vercel_production_url": "https://claude-test-tan.vercel.app",
+    "github_repo": "https://github.com/11mia/claude_test.git",
     "external_apis": {
       "polygon": "설정됨",
       "newsapi": "설정됨",

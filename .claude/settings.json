@@ -18,7 +18,7 @@
           {
             "type": "command",
             "shell": "powershell",
-            "command": "$json = $input | ConvertFrom-Json; $f = $json.tool_input.file_path; if ($f -match '\\.(ts|tsx)$' -and $f -match 'my-app') { Set-Location 'C:\\Users\\student\\0611\\my-app'; $result = npx tsc --noEmit 2>&1; if ($LASTEXITCODE -ne 0) { $out = $result | Select-Object -Last 10 | Out-String; Write-Output \"{`\"systemMessage`\": `\"TypeScript 오류 감지:\\n$($out.Trim())`\"}\"; } } ",
+            "command": "$j=$input|ConvertFrom-Json;$f=$j.tool_input.file_path;if($f -match '\\.(ts|tsx)$' -and $f -match 'my-app'){Set-Location 'C:\\Users\\student\\0611\\my-app';$r=npx tsc --noEmit 2>&1;if($LASTEXITCODE -ne 0){$out=$r|Select-Object -Last 10|Out-String;[PSCustomObject]@{systemMessage=('TypeScript 오류 감지:\\n'+$out.Trim())}|ConvertTo-Json -Compress}}",
             "timeout": 40,
             "statusMessage": "TypeScript 타입 검사 중...",
             "async": true
@@ -28,13 +28,35 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Write",
+        "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
             "shell": "powershell",
-            "command": "$json = $input | ConvertFrom-Json; $f = $json.tool_input.file_path; if ($f -match '\\.env') { Write-Output '{\"continue\": false, \"stopReason\": \".env 파일 직접 수정은 차단됩니다. 환경 변수는 Vercel 대시보드 또는 로컬 .env.local에서 직접 관리하세요. SUPABASE_SERVICE_ROLE_KEY 등 서버 전용 키가 클라이언트에 노출되지 않도록 주의하세요.\"}' }",
-            "timeout": 5
+            "command": "$j=$input|ConvertFrom-Json;$f=$j.tool_input.file_path;if($f -match '\\.env'){[PSCustomObject]@{continue=$false;stopReason='.env 파일 직접 수정 차단. 환경변수는 Vercel 대시보드 또는 로컬 .env.local에서 관리하세요. 키가 git에 노출되지 않도록 주의하세요.'}|ConvertTo-Json -Compress}",
+            "timeout": 5,
+            "statusMessage": "[guard] .env 경로 검사 중..."
+          },
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "$j=$input|ConvertFrom-Json;$c=if($j.tool_input.content){$j.tool_input.content}elseif($j.tool_input.new_string){$j.tool_input.new_string}else{''};foreach($p in @('NEXT_PUBLIC_SUPABASE_SERVICE_ROLE','NEXT_PUBLIC_ANTHROPIC','NEXT_PUBLIC_POLYGON_API','NEXT_PUBLIC_NEWS_API')){if($c -match $p){[PSCustomObject]@{continue=$false;stopReason=('차단: NEXT_PUBLIC_('+$p+')로 서버 전용 키를 노출하려 합니다. 클라이언트 번들에 포함되어 누구나 볼 수 있습니다. 서버 전용 키는 api/ 라우트에서만 사용하세요.')}|ConvertTo-Json -Compress;break}}",
+            "timeout": 5,
+            "statusMessage": "[guard] NEXT_PUBLIC_ 서버키 검사 중..."
+          },
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "$j=$input|ConvertFrom-Json;$c=if($j.tool_input.content){$j.tool_input.content}elseif($j.tool_input.new_string){$j.tool_input.new_string}else{''};if($c -match 'eyJ[A-Za-z0-9+/]{20,}|sk-ant-[A-Za-z0-9_-]{60,}|sbp_[a-zA-Z0-9]{40,}'){[PSCustomObject]@{continue=$false;stopReason='하드코딩된 API 키/토큰 패턴이 감지됐습니다. 키 값을 코드에 직접 포함하지 마세요. .env.local 환경변수를 사용하고 process.env.KEY_NAME 으로 참조하세요.'}|ConvertTo-Json -Compress}",
+            "timeout": 5,
+            "statusMessage": "[guard] 하드코딩 비밀키 패턴 검사 중..."
+          },
+          {
+            "type": "command",
+            "shell": "powershell",
+            "command": "$j=$input|ConvertFrom-Json;$f=$j.tool_input.file_path;$c=if($j.tool_input.content){$j.tool_input.content}elseif($j.tool_input.new_string){$j.tool_input.new_string}else{''};if($f -match 'src[/\\\\]' -and $f -notmatch '[/\\\\]api[/\\\\]|server\\.(ts|js)$'){foreach($k in @('SUPABASE_SERVICE_ROLE_KEY','ANTHROPIC_API_KEY','POLYGON_API_KEY','NEWS_API_KEY')){if($c -match ('process\\.env\\.'+$k)){[PSCustomObject]@{continue=$false;stopReason=('차단: 서버 전용 키('+$k+')가 클라이언트 파일에서 참조됩니다. src/app/api/ 라우트에서만 사용하세요.')}|ConvertTo-Json -Compress;break}}}",
+            "timeout": 5,
+            "statusMessage": "[guard] 서버키 클라이언트 참조 검사 중..."
           }
         ]
       }

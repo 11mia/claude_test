@@ -1,0 +1,42 @@
+{
+  "current_sprint": "sprint-01",
+  "overall_status": "planning",
+  "last_updated": "2026-06-01",
+  "sprints": {
+    "sprint-01": {
+      "status": "not_started",
+      "goal": "Supabase 기반 인증 + DB 스키마 + 공통 레이아웃 구축",
+      "completed_tasks": [],
+      "in_progress_tasks": [],
+      "blocked_tasks": []
+    },
+    "sprint-02": {
+      "status": "not_started",
+      "goal": "Watchlist CRUD + 글로벌 이슈 피드 + 주가 데이터 연동",
+      "completed_tasks": [],
+      "in_progress_tasks": [],
+      "blocked_tasks": []
+    },
+    "sprint-03": {
+      "status": "not_started",
+      "goal": "Claude AI 분석 + 알림 시스템 + 기관 평가 시각화",
+      "completed_tasks": [],
+      "in_progress_tasks": [],
+      "blocked_tasks": []
+    }
+  },
+  "quality_scores": {
+    "sprint-01": null,
+    "sprint-02": null,
+    "sprint-03": null
+  },
+  "environment": {
+    "supabase_project": "미설정",
+    "vercel_project": "미설정",
+    "external_apis": {
+      "polygon": "미설정",
+      "newsapi": "미설정",
+      "anthropic": "미설정"
+    }
+  }
+}
